@@ -5,4 +5,13 @@
 
 # include "Contact.hpp"
 
+class PhoneBook
+{
+private:
+	/* data */
+public:
+	PhoneBook(void);
+	~PhoneBook();
+};
+
 #endif

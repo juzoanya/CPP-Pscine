@@ -1,7 +1,7 @@
 
 #include <iostream>
 
-int main(int argc, char *argv[])
+int	main(int argc, char *argv[])
 {
 	int	i;
 	int	j;
@@ -13,7 +13,8 @@ int main(int argc, char *argv[])
 			//std::cout << argv[i] << std::endl;
 			for (j = 0; argv[i][j] != '\0'; j++)
 				std::cout << (char)toupper(argv[i][j]);
-			if (argv[i][j + 1] == ' ')
+			//std::cout << std::endl;
+			if (argv[i][j] == ' ')
 				std::cout << ' ';
 		}
 		std::cout << std::endl;

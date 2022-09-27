@@ -7,11 +7,12 @@
 
 class PhoneBook
 {
-private:
-	/* data */
 public:
 	PhoneBook(void);
 	~PhoneBook();
+
+	int	adContact();
+	int	searchContact();
 };
 
 #endif

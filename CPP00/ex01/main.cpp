@@ -3,6 +3,7 @@
 
 int	main(int argc, char *argv[])
 {
+	PhoneBook	phonebook;
 	std::string	buff;
 	bool		run = true;
 

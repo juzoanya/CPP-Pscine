@@ -3,7 +3,8 @@
 #ifndef CONTACT_HPP
 # define CONTACT_HPP
 
-#include <iostream>
+# include <iostream>
+# include <iomanip>
 
 class Contact
 {
@@ -14,7 +15,7 @@ private:
 	std::string	_phoneNumber;
 	std::string	_darkestSecret;
 public:
-	Contact(/* args */);
+	Contact(void);
 	~Contact();
 };
 

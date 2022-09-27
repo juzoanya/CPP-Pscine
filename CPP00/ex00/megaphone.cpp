@@ -10,11 +10,9 @@ int	main(int argc, char *argv[])
 	{
 		for (i = 1; argv[i] != NULL; i++)
 		{
-			//std::cout << argv[i] << std::endl;
-			for (j = 0; argv[i][j] != '\0'; j++)
+			for (j = 0; argv[i][j]; j++)
 				std::cout << (char)toupper(argv[i][j]);
-			//std::cout << std::endl;
-			if (argv[i][j] == ' ')
+			if (argv[i + 1] != NULL)
 				std::cout << ' ';
 		}
 		std::cout << std::endl;

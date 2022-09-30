@@ -17,6 +17,17 @@ private:
 public:
 	Contact(void);
 	~Contact();
+	void	setFirstName(std::string);
+	void	setLastName(std::string);
+	void	setNickName(std::string);
+	void	setPhoneNumber(std::string);
+	void	setDarkestSecret(std::string);
+
+	std::string	getFirstName(void);
+	std::string	getLastName(void);
+	std::string	getNickName(void);
+	std::string	getPhoneNumber(void);
+	std::string	getDarkestSecret(void);
 };
 
 #endif

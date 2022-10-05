@@ -165,13 +165,30 @@ t_philo	*init_philo(t_env *env)
 	return (philo);
 }
 
+int	philo_dead(t_philo *philo)
+{
+	long	time;
+
+	pthread_mutex_lock(&philo->env->time);
+	time = gettime();
+	pthread_mutex_unlock(&philo->env->time);
+	printf("SE-->%ld | TTD-->%ld\n", (time - philo->std_eat) - philo->env->start, philo->env->args.tt_die / 1000);
+	if (time - philo->std_eat > (philo->env->args.tt_die / 1000))
+	{
+		philo->state = died;
+		return (1);
+	}
+	return (0);
+}
+
 int	lock_left(t_philo *philo)
 {
 	if (pthread_mutex_lock(&philo->env->forks[philo->fork.left]) != 0)
 		return (0);
 	pthread_mutex_lock(&philo->env->print);
-	printf("%s%ld %d has taken a left fork\e[0m\n", "\e[0;36m", \
-		gettime() - philo->env->start, philo->id);
+	if (philo->state != died)
+		printf("%s%ld %d has taken a left fork\e[0m\n", "\e[0;36m", \
+			gettime() - philo->env->start, philo->id);
 	pthread_mutex_unlock(&philo->env->print);
 	return (1);
 }
@@ -181,8 +198,9 @@ int	lock_right(t_philo *philo)
 	if (pthread_mutex_lock(&philo->env->forks[philo->fork.right]) != 0)
 		return (0);
 	pthread_mutex_lock(&philo->env->print);
-	printf("%s%ld %d has taken a right fork\e[0m\n", "\e[0;36m", \
-		gettime() - philo->env->start, philo->id);
+	//if (philo->state != died)
+		printf("%s%ld %d has taken a right fork\e[0m\n", "\e[0;36m", \
+			gettime() - philo->env->start, philo->id);
 	pthread_mutex_unlock(&philo->env->print);
 	return (1);
 }
@@ -190,7 +208,8 @@ int	lock_right(t_philo *philo)
 void	ft_thinking(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->env->print);
-	printf("%s%ld %d is thinking\e[0m\n", "\e[1;33m", \
+	//if (philo->state != died)
+		printf("%s%ld %d is thinking\e[0m\n", "\e[1;33m", \
 			gettime() - philo->env->start, philo->id);
 	pthread_mutex_unlock(&philo->env->print);
 }
@@ -201,7 +220,8 @@ void	ft_eating(t_philo *philo)
 	philo->std_eat = gettime();
 	pthread_mutex_unlock(&philo->env->time);
 	pthread_mutex_lock(&philo->env->print);
-	printf("%s%ld %d is eating\e[0m\n", "\e[1;32m", \
+	//if (philo->state != died)
+		printf("%s%ld %d is eating\e[0m\n", "\e[1;32m", \
 			philo->std_eat - philo->env->start, philo->id);
 	pthread_mutex_unlock(&philo->env->print);
 	usleep(philo->env->args.tt_eat);
@@ -209,7 +229,8 @@ void	ft_eating(t_philo *philo)
 	pthread_mutex_unlock(&philo->env->forks[philo->fork.right]);
 	pthread_mutex_unlock(&philo->env->forks[philo->fork.left]);
 	pthread_mutex_lock(&philo->env->print);
-	printf("%s%ld %d is sleeping\e[0m\n", "\e[1;35m", \
+	//if (philo->state != died)
+		printf("%s%ld %d is sleeping\e[0m\n", "\e[1;35m", \
 			gettime() - philo->env->start, philo->id);
 	pthread_mutex_unlock(&philo->env->print);
 	usleep(philo->env->args.tt_sleep);
@@ -240,14 +261,31 @@ void	*checker(void *content)
 	t_philo	*philo;
 	t_env	*env;
 	int		i;
+	int		eat_cnt;
 
-	i = -1;
+	eat_cnt = 0;
 	philo = (t_philo *)content;
 	env = philo[0].env;
-	// if (env->args.nbr_meal > 0)
-	// 	while (ph)
-	// else
-	// 	while (philo[i].state != died)
+	while ((env->args.nbr_meal < 0 || (env->args.nbr_meal > 0 && eat_cnt < env->args.nbr_meal)) && !env->dead)
+	{
+		i = -1;
+		while (++i < env->args.nbr && !env->dead)
+		{
+			if (philo_dead(&philo[i]))
+			{
+				pthread_mutex_lock(&env->print);
+				printf("%s%ld %d died\e[0m\n", "\e[1;31m", gettime() - env->start, philo[i].id);
+				pthread_mutex_unlock(&env->print);
+				pthread_mutex_lock(&env->death);
+				env->dead = 1;
+				pthread_mutex_unlock(&env->death);
+				i = -1;
+				while (++i < env->args.nbr)
+					philo[i].state = died;
+				break ;
+			}
+		}
+	}
 }
 
 void	*routine(void *content)

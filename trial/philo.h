@@ -8,6 +8,14 @@
 # include <pthread.h>
 # include <string.h>
 
+enum e_states
+{
+	sleeping = 1,
+	eating,
+	thinking,
+	died
+};
+
 typedef struct s_args
 {
 	int			tt_eat;
@@ -41,6 +49,7 @@ typedef struct s_philo
 	long		std_eat;
 	long		std_sleep;
 	int			eat_cnt;
+	int			state;
 	t_fork		fork;
 	t_env		*env;
 	pthread_t	th;

@@ -161,6 +161,8 @@ t_philo	*init_philo(t_env *env)
 		philo[i].std_sleep = 0;
 		philo[i].fork.left = i;
 		philo[i].fork.right = (i + 1) % env->args.nbr;
+		if (pthread_mutex_init(&philo[i].meal_cnt, NULL) != 0)
+			return (NULL);
 	}
 	return (philo);
 }
@@ -172,8 +174,8 @@ int	philo_dead(t_philo *philo)
 	pthread_mutex_lock(&philo->env->time);
 	time = gettime();
 	pthread_mutex_unlock(&philo->env->time);
-	printf("SE-->%ld | TTD-->%ld\n", (time - philo->std_eat) - philo->env->start, philo->env->args.tt_die / 1000);
-	if (time - philo->std_eat > (philo->env->args.tt_die / 1000))
+	//printf("TM-->%ld | SE-->%ld | TTD-->%ld\n", time, (time - philo->std_eat) - philo->env->start, philo->env->args.tt_die / 1000);
+	if ((time - philo->std_eat) - philo->env->start > (philo->env->args.tt_die / 1000))
 	{
 		philo->state = died;
 		return (1);
@@ -254,6 +256,21 @@ int	exec_task(t_philo *philo)
 		pthread_mutex_unlock(&philo->env->forks[philo->fork.left]);
 	else if (right && !left)
 		pthread_mutex_unlock(&philo->env->forks[philo->fork.right]);
+	return (1);
+}
+
+int	philo_eat_count(t_philo *philo, int sw)
+{
+	int	eat_cnt;
+
+	eat_cnt = 0;
+	pthread_mutex_lock(&philo->meal_cnt);
+	if (sw == 0)
+		eat_cnt = philo->eat_cnt;
+	else if (sw == 1)
+		philo->eat_cnt++;
+	pthread_mutex_unlock(&philo->meal_cnt);
+	return (eat_cnt);
 }
 
 void	*checker(void *content)
@@ -263,9 +280,9 @@ void	*checker(void *content)
 	int		i;
 	int		eat_cnt;
 
-	eat_cnt = 0;
 	philo = (t_philo *)content;
 	env = philo[0].env;
+	eat_cnt = philo->eat_cnt;
 	while ((env->args.nbr_meal < 0 || (env->args.nbr_meal > 0 && eat_cnt < env->args.nbr_meal)) && !env->dead)
 	{
 		i = -1;
@@ -281,9 +298,11 @@ void	*checker(void *content)
 				pthread_mutex_unlock(&env->death);
 				i = -1;
 				while (++i < env->args.nbr)
-					philo[i].state = died;
-				break ;
+					philo[i].env->dead = 1;
+				return (NULL);
 			}
+			// if (env->args.nbr_meal > 0 && philo_eat_count(philo, 0) >= env->args.nbr_meal)
+			// 	eat_cnt++;
 		}
 	}
 }
@@ -298,11 +317,15 @@ void	*routine(void *content)
 	if (philo->id % 2 == 0)
 		usleep(philo->env->args.tt_eat / 2);
 	if (philo->env->args.nbr_meal > 0)
-		while (philo->state != died && philo->eat_cnt != philo->env->args.nbr_meal)
+		while (philo->eat_cnt != philo->env->args.nbr_meal && philo->env->dead != 1)
 			exec_task(philo);
+			// if (!exec_task(philo))
+			// 	return (NULL);
 	else
-		while (philo->state != died)
+		while (philo->env->dead != 1)
 			exec_task(philo);
+			// if (!exec_task(philo))
+			// 	return (NULL);
 }
 
 void	run_philo(t_env *env, t_philo *philo)

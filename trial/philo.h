@@ -45,14 +45,15 @@ typedef struct s_env
 
 typedef struct s_philo
 {
-	int			id;
-	long		std_eat;
-	long		std_sleep;
-	int			eat_cnt;
-	int			state;
-	t_fork		fork;
-	t_env		*env;
-	pthread_t	th;
+	int				id;
+	long			std_eat;
+	long			std_sleep;
+	int				eat_cnt;
+	int				state;
+	t_fork			fork;
+	t_env			*env;
+	pthread_mutex_t	meal_cnt;
+	pthread_t		th;
 }				t_philo;
 
 // //error handling function

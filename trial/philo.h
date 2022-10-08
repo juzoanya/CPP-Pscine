@@ -39,7 +39,8 @@ typedef struct s_env
 	pthread_t		track;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print;
-	pthread_mutex_t	time;
+	pthread_mutex_t	access;
+	//pthread_mutex_t	count;
 	pthread_mutex_t	death;
 }					t_env;
 

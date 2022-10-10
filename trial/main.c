@@ -194,7 +194,7 @@ int	death_lock_assign(t_philo *philo)
 	int	death;
 
 	pthread_mutex_lock(&philo->env->death);
-	death = philo->state;
+	death = philo->env->dead;
 	pthread_mutex_unlock(&philo->env->death);
 	return (death);
 }
@@ -234,7 +234,7 @@ int	philo_dead(t_philo *philo)
 	std_eat = philo->std_eat;
 	pthread_mutex_unlock(&philo->env->access);
 	//printf("ST-->%ld | TM-->%ld | SE-->%ld | TTD-->%ld\n", philo->env->start, time, (time - std_eat) - philo->env->start, philo->env->args.tt_die / 1000);
-	if ((time - std_eat) - philo->env->start > (philo->env->args.tt_die / 1000))
+	if ((std_eat == 0 && time - philo->env->start > (philo->env->args.tt_die / 1000)) || (std_eat > 0 && time - std_eat > (philo->env->args.tt_die / 1000)))//((time - std_eat) - philo->env->start > (philo->env->args.tt_die / 1000))
 	{
 		pthread_mutex_lock(&philo->env->access);
 		philo->state = died;
@@ -251,9 +251,9 @@ int	lock_left(t_philo *philo)
 	pthread_mutex_lock(&philo->env->print);
 	pthread_mutex_lock(&philo->env->death);
 	if (philo->env->dead != 1)
-		pthread_mutex_unlock(&philo->env->death);
 		printf("%s%ld %d has taken a left fork\e[0m\n", "\e[0;36m", \
 			gettime() - philo->env->start, philo->id);
+	pthread_mutex_unlock(&philo->env->death);
 	pthread_mutex_unlock(&philo->env->print);
 	return (1);
 }
@@ -265,45 +265,37 @@ int	lock_right(t_philo *philo)
 	pthread_mutex_lock(&philo->env->print);
 	pthread_mutex_lock(&philo->env->death);
 	if (philo->env->dead != 1)
-	{
-		pthread_mutex_unlock(&philo->env->death);
 		printf("%s%ld %d has taken a right fork\e[0m\n", "\e[0;36m", \
 			gettime() - philo->env->start, philo->id);
-	}
+	pthread_mutex_unlock(&philo->env->death);
 	pthread_mutex_unlock(&philo->env->print);
 	return (1);
 }
 
-void	ft_thinking(t_philo *philo, int death)
+void	ft_thinking(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->env->print);
 	pthread_mutex_lock(&philo->env->death);
 	if (philo->env->dead != 1)
-	{
-		pthread_mutex_unlock(&philo->env->death);
 		printf("%s%ld %d is thinking\e[0m\n", "\e[1;33m", \
 			gettime() - philo->env->start, philo->id);
-	}
+	pthread_mutex_unlock(&philo->env->death);
 	pthread_mutex_unlock(&philo->env->print);
 }
 
 void	ft_eating(t_philo *philo)
 {
 	long	std_eat;
-	int		death;
 
-	death = death_lock_assign(philo);
 	pthread_mutex_lock(&philo->env->access);
 	philo->std_eat = gettime();
 	pthread_mutex_unlock(&philo->env->access);
 	pthread_mutex_lock(&philo->env->print);
 	pthread_mutex_lock(&philo->env->death);
 	if (philo->env->dead != 1)
-	{
-		pthread_mutex_unlock(&philo->env->death);
 		printf("%s%ld %d is eating\e[0m\n", "\e[1;32m", \
 			philo->std_eat - philo->env->start, philo->id);
-	}
+	pthread_mutex_unlock(&philo->env->death);
 	pthread_mutex_unlock(&philo->env->print);
 	usleep(philo->env->args.tt_eat);
 	pthread_mutex_lock(&philo->env->access);
@@ -314,14 +306,12 @@ void	ft_eating(t_philo *philo)
 	pthread_mutex_lock(&philo->env->print);
 	pthread_mutex_lock(&philo->env->death);
 	if (philo->env->dead != 1)
-	{
-		pthread_mutex_unlock(&philo->env->death);
 		printf("%s%ld %d is sleeping\e[0m\n", "\e[1;35m", \
 			gettime() - philo->env->start, philo->id);
-	}
+	pthread_mutex_unlock(&philo->env->death);
 	pthread_mutex_unlock(&philo->env->print);
 	usleep(philo->env->args.tt_sleep);
-	ft_thinking(philo, death);
+	ft_thinking(philo);
 }
 
 int	exec_task(t_philo *philo)
@@ -388,14 +378,23 @@ void	*checker(void *content)
 		else if (philo_dead(&philo[i]))
 		{
 			pthread_mutex_lock(&env->print);
-			printf("%s%ld %d died\e[0m\n", "\e[1;31m", gettime() - env->start, philo[i].id);
+			//pthread_mutex_lock(&philo->env->death);
+			//if (philo->env->dead != 1)
+			//{
+			//	pthread_mutex_unlock(&philo->env->death);
+				printf("%s%ld %d died\e[0m\n", "\e[1;31m", gettime() - env->start, philo[i].id);
+			//}
 			pthread_mutex_unlock(&env->print);
 			pthread_mutex_lock(&env->death);
 			env->dead = 1;
 			pthread_mutex_unlock(&env->death);
 			i = -1;
 			while (++i < env->args.nbr)
+			{
+				pthread_mutex_lock(&env->death);
 				philo[i].env->dead = 1;
+				pthread_mutex_unlock(&env->death);
+			}
 			break ;
 		}
 		i++;
@@ -408,21 +407,21 @@ void	*routine(void *content)
 {
 	t_philo	*philo;
 	int		i;
-	int		state;
+	int		d_status;
 
 	i = -1;
 	philo = (t_philo *)content;
 	if (philo->id % 2 == 0)
 		usleep(philo->env->args.tt_eat / 2);
-	state = state_lock_assign(philo, state);
+	d_status = death_lock_assign(philo);
 	while (1)
 	{
-		if ((philo->env->args.nbr_meal > 0 && philo->eat_cnt == philo->env->args.nbr_meal) || state == died)
+		if ((philo->env->args.nbr_meal > 0 && philo->eat_cnt == philo->env->args.nbr_meal) || d_status == 1)
 			break ;
 		else
 		{
 			exec_task(philo);
-			state = state_lock_assign(philo, state);
+			d_status = death_lock_assign(philo);
 		}
 	}
 }

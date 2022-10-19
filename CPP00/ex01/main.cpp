@@ -3,11 +3,13 @@
 
 int	main(int argc, char *argv[])
 {
-	PhoneBook	phonebook;
+	PhoneBook	phoneBook;
 	std::string	buff;
 	bool		run = true;
+	int			index;
 
 	(void)argv;
+	index = 0;
 	if (argc != 1)
 		return (1);
 	while (run)
@@ -16,9 +18,12 @@ int	main(int argc, char *argv[])
 		if (!std::getline(std::cin, buff))
 			return (0);
 		if (buff == "ADD")
-			std::cout << "Let's add something new here!" << std::endl;
+		{
+			phoneBook.add_contact(index);
+			index++;
+		}
 		if (buff == "SEARCH")
-			std::cout << "Let's Search something new here!" << std::endl;
+			phoneBook.search_contact();
 		if (buff == "EXIT")
 		{
 			std::cout << "Programme Terminated!" << std::endl;

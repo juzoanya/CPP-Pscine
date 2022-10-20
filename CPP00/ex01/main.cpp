@@ -29,11 +29,16 @@ int	main(int argc, char *argv[])
 		if (!std::getline(std::cin, buff))
 			return (0);
 		if (buff == "ADD")
+		{
 			if (prep_ad_contact(&phoneBook, &index))
 				break;
-		if (buff == "SEARCH")
-			phoneBook.search_contact(index);
-		if (buff == "EXIT")
+		}
+		else if (buff == "SEARCH")
+		{
+			if (phoneBook.search_contact(index))
+				break;
+		}
+		else if (buff == "EXIT")
 		{
 			std::cout << "Programme Terminated!" << std::endl;
 			run = false;

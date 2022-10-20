@@ -26,7 +26,6 @@ int	PhoneBook::add_contact(int index)
 	std::cout << "> Enter First Name: ";
 	while (std::getline(std::cin, str) && str.empty())
 		std::cout << "> Enter First Name: ";
-	//std::cout << "$" << str << "$" << std::endl;
 	this->contacts[index].setFirstName(str);
 	std::cout << "> Enter Last Name: ";
 	while (std::getline(std::cin, str) && str.empty())
@@ -50,7 +49,6 @@ int	PhoneBook::add_contact(int index)
 int	PhoneBook::search_contact(int index)
 {
 	std::string	str;
-	int			id = 0;
 
 	if (index == 0)
 	{
@@ -71,19 +69,26 @@ int	PhoneBook::search_contact(int index)
 	}
 	std::cout << "> Enter Index: ";
 	while (std::getline(std::cin, str))
-		std::cout << "> Enter Index: ";
-	print_one(id);
-	std::cout << id << std::endl;
+	{
+		if (str.length() > 1 || str[0] < '0' || str[0] > '9' || str[0] > (index + 48 - 1))
+		{
+			std::cout << "Index is invalid!" << std::endl;
+			std::cout << "> Enter Index: ";
+		}
+		else
+		{
+			print_one(str[0] + '0');
+			break;
+		}
+	}
 	return (0);
-}
-
-void	PhoneBook::print_all()
-{
-	std::cout << "Function to print all contact" << std::endl;
 }
 
 void	PhoneBook::print_one(int index)
 {
-	(void)index;
-	std::cout << "Function to print specific contact" << std::endl;
+	std::cout << "First Name: " << contacts[index % MAX_NUM].getFirstName() << std::endl;
+	std::cout << "Last Name: " << contacts[index % MAX_NUM].getLastName() << std::endl;
+	std::cout << "Nickname: " << contacts[index % MAX_NUM].getNickName() << std::endl;
+	std::cout << "Phone Number: " << contacts[index % MAX_NUM].getPhoneNumber() << std::endl;
+	std::cout << "Dark Secret: " << contacts[index % MAX_NUM].getDarkestSecret() << std::endl;
 }

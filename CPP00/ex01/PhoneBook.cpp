@@ -8,15 +8,10 @@ PhoneBook::~PhoneBook(void) {}
 
 void	print_string(std::string str)
 {
-	std::string	temp;
-
 	if (str.length() > 10)
-	{
-		temp = str.substr(0, 9);
-		std::cout << "|" << std::setw(10) << temp << ".";
-	}
+		std::cout << "|" << str.substr(0, 9) << ".";
 	else
-		std::cout << "|" << std::setw(10) << str;
+		std::cout << "|" << std::setfill(' ') << str.substr(0, 10) << str;
 }
 
 int	is_numbers(std::string str)

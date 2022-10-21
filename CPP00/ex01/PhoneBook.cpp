@@ -19,6 +19,15 @@ void	print_string(std::string str)
 		std::cout << "|" << std::setw(10) << str;
 }
 
+int	is_numbers(std::string str)
+{
+	for (int i = 0; str[i] != '\0'; i++){
+		if (!isdigit(str[i]))
+			return (0);
+	}
+	return (1);
+}
+
 int	PhoneBook::add_contact(int index)
 {
 	std::string	str;
@@ -36,7 +45,7 @@ int	PhoneBook::add_contact(int index)
 		std::cout << "> Enter Nickname: ";
 	this->contacts[index].setNickName(str);
 	std::cout << "> Enter Phone Name: ";
-	while (std::getline(std::cin, str) && str.empty())
+	while ((std::getline(std::cin, str) && str.empty()) || (!str.empty() && !is_numbers(str)))
 		std::cout << "> Enter Phone Name: ";
 	this->contacts[index].setPhoneNumber(str);
 	std::cout << "> Enter Dark Secret: ";

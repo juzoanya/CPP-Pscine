@@ -3,12 +3,12 @@
 
 int	prep_ad_contact(PhoneBook *phoneBook, int *index)
 {
-	if (!phoneBook->add_contact((*index) % 8))
+	if (!phoneBook->add_contact((*index) % MAX_NUM))
 		return (1);
-	if ((*index) + 1 < 16)
+	if ((*index) + 1 < MAX_NUM)
 		(*index)++;
 	else
-		(*index) = 8;
+		(*index) = MAX_NUM;
 	return (0);
 }
 

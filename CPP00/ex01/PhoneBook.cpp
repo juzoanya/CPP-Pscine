@@ -11,7 +11,7 @@ void	print_string(std::string str)
 	if (str.length() > 10)
 		std::cout << "|" << str.substr(0, 9) << ".";
 	else
-		std::cout << "|" << std::setfill(' ') << str.substr(0, 10) << str;
+		std::cout << "|" << std::setw(10) << str;
 }
 
 int	is_numbers(std::string str)

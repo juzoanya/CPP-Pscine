@@ -6,18 +6,15 @@
 #    By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/12 19:46:20 by juzoanya          #+#    #+#              #
-#    Updated: 2022/12/12 19:46:26 by juzoanya         ###   ########.fr        #
+#    Updated: 2022/12/12 20:35:49 by juzoanya         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = zombie
+NAME = reference
 CC = g++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -ggdb3
 
-
 SRC = 	main.cpp \
-		Zombie.cpp \
-		zombieHorde.cpp \
 
 OBJ = $(SRC:.cpp=.o)
 

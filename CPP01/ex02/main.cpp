@@ -6,7 +6,7 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 19:49:51 by juzoanya          #+#    #+#             */
-/*   Updated: 2022/12/12 19:49:55 by juzoanya         ###   ########.fr       */
+/*   Updated: 2022/12/12 20:44:09 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,15 @@ int	main(void)
 	std::string	*stringPTR = &str;
 	std::string	&stringREF = str;
 
+	std::cout << "Variable Address = " << &str << std::endl;
+	std::cout << "stringPTR Address = " << stringPTR << std::endl;
+	std::cout << "stringREF Address = " << &stringREF << std::endl;
 
+	std::cout << "------------------------------------" << std::endl;
+
+	std::cout << "variable Value = " << str << std::endl;
+	std::cout << "stringPTR Value = " << *stringPTR << std::endl;
+	std::cout << "stringREF Value = " << stringREF << std::endl;
+
+	return (0);
 }

@@ -2,6 +2,11 @@
 
 #include "Zombie.hpp"
 
+Zombie::Zombie()
+{
+	std::cout << "Zombie has been created" << std::endl;
+}
+
 Zombie::Zombie(std::string name)
 {
 	this->_name = name;

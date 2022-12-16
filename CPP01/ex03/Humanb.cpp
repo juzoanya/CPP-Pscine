@@ -6,7 +6,7 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 15:29:07 by juzoanya          #+#    #+#             */
-/*   Updated: 2022/12/15 16:24:47 by juzoanya         ###   ########.fr       */
+/*   Updated: 2022/12/16 16:29:50 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,10 @@ void	HumanB::attack()
 {
 	if (!this->_weapon)
 		return ;
-	std::cout << this->_name << " attacks with their " << this->_weapon.getType() << std::endl;
+	std::cout << this->_name << " attacks with their " << this->_weapon->getType() << std::endl;
+}
+
+void	HumanB::setWeapon(Weapon &weapon)
+{
+	this->_weapon = &weapon;
 }

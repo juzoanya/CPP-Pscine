@@ -6,11 +6,14 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 15:29:13 by juzoanya          #+#    #+#             */
-/*   Updated: 2022/12/16 16:27:46 by juzoanya         ###   ########.fr       */
+/*   Updated: 2022/12/20 11:35:32 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Weapon.hpp"
+#ifndef HUMANB_HPP
+# define HUMANB_HPP
+
+# include "Weapon.hpp"
 
 class	HumanB
 {
@@ -24,3 +27,5 @@ class	HumanB
 		std::string	_name;
 		Weapon		*_weapon;
 };
+
+#endif

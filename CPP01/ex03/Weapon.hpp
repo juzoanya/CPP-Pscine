@@ -6,7 +6,7 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 20:46:43 by juzoanya          #+#    #+#             */
-/*   Updated: 2022/12/12 20:51:16 by juzoanya         ###   ########.fr       */
+/*   Updated: 2022/12/20 11:20:17 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 # define WEAPON_HPP
 
 # include <iostream>
+# include <string>
 
 class Weapon
 {
 	private:
-		std::string	type;
+		std::string	_type;
 
 	public:
 		Weapon(std::string type);

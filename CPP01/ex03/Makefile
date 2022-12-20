@@ -6,7 +6,7 @@
 #    By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/15 15:29:20 by juzoanya          #+#    #+#              #
-#    Updated: 2022/12/15 16:27:40 by juzoanya         ###   ########.fr        #
+#    Updated: 2022/12/20 11:43:12 by juzoanya         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,15 +19,18 @@ SRC = 	HumanA.cpp \
 		Weapon.cpp \
 		main.cpp \
 
+HEADERS = HumanA.hpp HumanB.hpp Weapon.hpp
+INCS = .
+
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
 
 %.o: %.cpp
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(INCS) -c $< -o $@
 
-$(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+$(NAME): $(OBJ) $(HEADERS)
+	@$(CC) $(CFLAGS) -I$(INCS) $(OBJ) -o $(NAME)
 
 clean:
 	@/bin/rm -f $(OBJ)

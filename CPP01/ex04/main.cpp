@@ -6,16 +6,19 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:43:45 by juzoanya          #+#    #+#             */
-/*   Updated: 2022/12/20 16:11:28 by juzoanya         ###   ########.fr       */
+/*   Updated: 2023/01/12 16:24:08 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
+#include <fstream>
 
 
 int	stringReplace(std::string file, std::string s1, std::string s2)
 {
-	
+	std::ifstream	inputFile;
+	std::ofstream	outputFile;
+
 	return (0);
 }
 

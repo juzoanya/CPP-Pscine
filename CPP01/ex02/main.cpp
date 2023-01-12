@@ -6,7 +6,7 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 19:49:51 by juzoanya          #+#    #+#             */
-/*   Updated: 2022/12/12 20:44:09 by juzoanya         ###   ########.fr       */
+/*   Updated: 2023/01/12 09:05:06 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	main(void)
 {
-	std::string	str = "HI THIS IS BRAIN";
-	std::string	*stringPTR = &str;
-	std::string	&stringREF = str;
+	std::string		str = "HI THIS IS BRAIN";
+	std::string*	stringPTR = &str;
+	std::string&	stringREF = str;
 
 	std::cout << "Variable Address = " << &str << std::endl;
 	std::cout << "stringPTR Address = " << stringPTR << std::endl;

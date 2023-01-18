@@ -6,7 +6,7 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 16:18:23 by juzoanya          #+#    #+#             */
-/*   Updated: 2023/01/17 16:58:51 by juzoanya         ###   ########.fr       */
+/*   Updated: 2023/01/18 09:11:44 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,16 @@ void	Harl::error(void)
 
 void	Harl::complain(std::string level)
 {
+	int	n = 0;
 	void (Harl::*levels[4])(void) = {&Harl::debug, &Harl::info, &Harl::warning, &Harl::error};
 
 	std::string	mode[4] = {"debug", "info", "warning", "error" };
 	for (int i = 0; i < 4; i++)
 	{
-		if (level = mode[i])
+		if (level == mode[i])
 			(this->*(levels[i]))();
+		n++;
 	}
+	if (n == 4)
+		std::cout << "[" << level << "]" << " is not a valid complain!" << std::endl;
 }

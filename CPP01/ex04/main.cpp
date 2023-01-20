@@ -6,7 +6,7 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:43:45 by juzoanya          #+#    #+#             */
-/*   Updated: 2023/01/17 15:48:12 by juzoanya         ###   ########.fr       */
+/*   Updated: 2023/01/19 20:53:29 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,17 @@ int	stringReplace(std::string file, std::string s1, std::string s2)
 	std::size_t		spos;
 	std::string		buffer;
 	std::string		newStr;
-	std::ifstream	inputFile(file, std::ios_base::in);
-	std::ofstream	outputFile(file.append(".replace"));
+	std::ifstream	inputFile;
+	std::ofstream	outputFile;
 
+	inputFile.open(file.c_str(), std::ios::in);
 	if (!inputFile.is_open())
 	{
 		std::cerr << "Error: failed to open " << file << std::endl;
 		return (1);
 	}
+	std::string	outFile = file.append(".replace");
+	outputFile.open(outFile.c_str(), std::ios::out);
 	if (!outputFile.is_open())
 	{
 		std::cerr << "Error: failed to create " << file.append(".replace") << std::endl;

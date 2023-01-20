@@ -6,7 +6,7 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:43:45 by juzoanya          #+#    #+#             */
-/*   Updated: 2023/01/19 20:53:29 by juzoanya         ###   ########.fr       */
+/*   Updated: 2023/01/20 16:04:41 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,36 +18,30 @@
 int	stringReplace(std::string file, std::string s1, std::string s2)
 {
 	std::size_t		pos;
-	std::size_t		spos;
 	std::string		buffer;
-	std::string		newStr;
 	std::ifstream	inputFile;
 	std::ofstream	outputFile;
 
 	inputFile.open(file.c_str(), std::ios::in);
-	if (!inputFile.is_open())
+	if (inputFile.fail())
 	{
 		std::cerr << "Error: failed to open " << file << std::endl;
 		return (1);
 	}
-	std::string	outFile = file.append(".replace");
-	outputFile.open(outFile.c_str(), std::ios::out);
-	if (!outputFile.is_open())
+	outputFile.open(file.append(".replace").c_str(), std::ios::out);
+	if (outputFile.fail())
 	{
 		std::cerr << "Error: failed to create " << file.append(".replace") << std::endl;
 		return (1);
 	}
-	spos = 0;
 	while (std::getline(inputFile, buffer))
 	{
 		while ((pos = buffer.find(s1)) != std::string::npos)
 		{
-			buffer.erase(spos, s1.size());
-			buffer.insert(spos, s2);
+			buffer.erase(pos, s1.size());
+			buffer.insert(pos, s2);
 		}
-		outputFile << buffer;
-		if (inputFile.eof())
-			outputFile << std::endl;
+		outputFile << buffer << std::endl;
 	}
 	inputFile.close();
 	outputFile.close();

@@ -6,7 +6,7 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 16:40:40 by juzoanya          #+#    #+#             */
-/*   Updated: 2023/01/27 08:42:35 by juzoanya         ###   ########.fr       */
+/*   Updated: 2023/01/27 16:39:50 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,20 @@ class Fixed
 
 	public:
 		Fixed(void);
+		Fixed(const int nbr);
+		Fixed(const float nbr);
 		Fixed(const Fixed& nbr);
 		Fixed& operator=(const Fixed& nbr);
+		Fixed& operator<<(const Fixed& nbr);
 		~Fixed(void);
 
 		int		getRawBits(void) const;
 		void	setRawBits(int const raw);
+
+		float	toFloat(void) const;
+		int		toInt(void) const;
 };
+
+std::ostream& operator<<(std::ostream& obj, Fixed const & rhs);
 
 #endif

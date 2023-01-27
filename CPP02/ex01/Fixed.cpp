@@ -6,7 +6,7 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 16:53:14 by juzoanya          #+#    #+#             */
-/*   Updated: 2023/01/27 08:54:54 by juzoanya         ###   ########.fr       */
+/*   Updated: 2023/01/27 16:50:12 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,18 @@ Fixed::Fixed(void)
 Fixed::~Fixed(void)
 {
 	std::cout << "Destructor called" << std::endl;
+}
+
+Fixed::Fixed(const int nbr): _nbr(0)
+{
+	std::cout << "Int constructor called" << std::endl;
+	this->_nbr = nbr << this->_bit;
+	return;
+}
+
+Fixed::Fixed(const float nbr): _nbr(0)
+{
+	std::cout << "Float constructor called" << std::endl;
 }
 
 Fixed::Fixed(const Fixed& nbr): _nbr(0)
@@ -46,6 +58,16 @@ int	Fixed::getRawBits() const
 void	Fixed::setRawBits(int const raw)
 {
 	_nbr = raw;
+}
+
+int	Fixed::toInt(void) const
+{
+	
+}
+
+float	Fixed::toFloat(void) const
+{
+	
 }
 
 const int	Fixed::_bit = 8;

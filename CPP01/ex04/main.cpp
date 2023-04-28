@@ -6,7 +6,7 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:43:45 by juzoanya          #+#    #+#             */
-/*   Updated: 2023/01/20 16:04:41 by juzoanya         ###   ########.fr       */
+/*   Updated: 2023/04/28 13:32:45 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,21 @@ int	stringReplace(std::string file, std::string s1, std::string s2)
 		std::cerr << "Error: failed to create " << file.append(".replace") << std::endl;
 		return (1);
 	}
-	while (std::getline(inputFile, buffer))
+	pos = 0;
+	while (inputFile.good() && outputFile.good())
 	{
-		while ((pos = buffer.find(s1)) != std::string::npos)
+		std::getline(inputFile, buffer);
+		pos = buffer.find(s1, 0);
+		while (pos != std::string::npos)
 		{
-			buffer.erase(pos, s1.size());
+			buffer.erase(pos, s1.length());
 			buffer.insert(pos, s2);
+			pos = buffer.find(s1, pos);
 		}
-		outputFile << buffer << std::endl;
+		outputFile << buffer;
+		if (inputFile.eof())
+			break;
+		outputFile << std::endl;
 	}
 	inputFile.close();
 	outputFile.close();

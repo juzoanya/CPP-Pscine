@@ -6,7 +6,7 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 16:40:40 by juzoanya          #+#    #+#             */
-/*   Updated: 2023/01/27 08:42:35 by juzoanya         ###   ########.fr       */
+/*   Updated: 2023/05/18 09:57:02 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ class Fixed
 {
 	private:
 		int					_nbr;
-		static int const	_bit;
+		static int const	_bit = 8;
 
 	public:
 		Fixed(void);
-		Fixed(const Fixed& nbr);
-		Fixed& operator=(const Fixed& nbr);
+		Fixed(Fixed const & src);
+		Fixed& operator=(const Fixed& rhs);
 		~Fixed(void);
 
 		int		getRawBits(void) const;

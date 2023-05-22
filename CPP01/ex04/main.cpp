@@ -6,7 +6,7 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 15:43:45 by juzoanya          #+#    #+#             */
-/*   Updated: 2023/04/28 13:32:45 by juzoanya         ###   ########.fr       */
+/*   Updated: 2023/05/22 17:31:00 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,40 +18,40 @@
 int	stringReplace(std::string file, std::string s1, std::string s2)
 {
 	std::size_t		pos;
+	std::size_t		found;
 	std::string		buffer;
 	std::ifstream	inputFile;
 	std::ofstream	outputFile;
 
 	inputFile.open(file.c_str(), std::ios::in);
-	if (inputFile.fail())
+	if (!inputFile.is_open())
 	{
 		std::cerr << "Error: failed to open " << file << std::endl;
 		return (1);
 	}
 	outputFile.open(file.append(".replace").c_str(), std::ios::out);
-	if (outputFile.fail())
+	if (!outputFile.is_open())
 	{
 		std::cerr << "Error: failed to create " << file.append(".replace") << std::endl;
 		return (1);
 	}
 	pos = 0;
-	while (inputFile.good() && outputFile.good())
+	while (std::getline(inputFile, buffer))
 	{
-		std::getline(inputFile, buffer);
-		pos = buffer.find(s1, 0);
-		while (pos != std::string::npos)
+		found = buffer.find(s1, pos);
+		while (found != std::string::npos)
 		{
-			buffer.erase(pos, s1.length());
-			buffer.insert(pos, s2);
-			pos = buffer.find(s1, pos);
+			outputFile << buffer.substr(pos, found - pos);
+			outputFile << s2;
+			pos = found + s1.size();
+			found = buffer.find(s1, pos);
 		}
-		outputFile << buffer;
-		if (inputFile.eof())
-			break;
+		outputFile << buffer.substr(pos);
 		outputFile << std::endl;
 	}
 	inputFile.close();
 	outputFile.close();
+	std::cout << "Sed Complete. Output File: " << file << std::endl;
 	return (0);
 }
 

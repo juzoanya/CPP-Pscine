@@ -1,47 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cat.cpp                                            :+:      :+:    :+:   */
+/*   WrongAnimal.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/12 13:58:51 by juzoanya          #+#    #+#             */
-/*   Updated: 2023/05/29 14:17:57 by juzoanya         ###   ########.fr       */
+/*   Created: 2023/05/29 14:04:47 by juzoanya          #+#    #+#             */
+/*   Updated: 2023/05/29 14:31:06 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Cat.hpp"
+#include "WrongAnimal.hpp"
 
-Cat::Cat() : Animal()
+WrongAnimal::WrongAnimal()
 {
-	this->_type = "Cat";
+	this->_type = "";
 	std::cout << this->_type << " Default constructor called." << std::endl;
 }
 
-Cat::Cat(std::string type) : Animal()
+WrongAnimal::WrongAnimal(std::string type)
 {
 	this->_type = type;
 	std::cout << this->_type << " parameterized constructor called." << std::endl;
 }
 
-Cat::Cat(const Cat& src) : Animal()
+WrongAnimal::WrongAnimal(const WrongAnimal& src)
 {
 	*this = src;
-	std::cout << src._type << " copy constructor called." << std::endl;
+	std::cout << this->_type << " copy constructor called." << std::endl;
 }
 
-Cat& Cat::operator=(const Cat& rhs)
+WrongAnimal& WrongAnimal::operator=(const WrongAnimal& rhs)
 {
-	Animal::operator=(rhs);
+	this->_type = rhs._type;
 	return(*this);
 }
 
-Cat::~Cat()
+WrongAnimal::~WrongAnimal()
 {
-	std::cout << "Destructor called for " << this->_type << std::endl;
+	std::cout << "WrongAnimal Destructor called for " << this->_type << std::endl;
 }
 
-void	Cat::makeSound() const
+void	WrongAnimal::makeSound() const
 {
-	std::cout << "Meow" << std::endl;
+	std::cout << "Default WrongAnimal Sound." << std::endl;
+}
+
+std::string	WrongAnimal::getType() const
+{
+	return(this->_type);
 }

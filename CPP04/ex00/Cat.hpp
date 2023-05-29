@@ -6,7 +6,7 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 09:54:00 by juzoanya          #+#    #+#             */
-/*   Updated: 2023/05/12 14:00:32 by juzoanya         ###   ########.fr       */
+/*   Updated: 2023/05/29 13:12:49 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,18 @@
 
 # include "Animal.hpp"
 
-class Cat : Animal
+class Cat : public Animal
 {
 	private:
 	
 	public:
 		Cat(void);
 		Cat(std::string type);
-		Cat(Cat const &src);
-		Cat& operator=(Cat const &rhs);
+		Cat(const Cat& src);
+		Cat& operator=(const Cat& rhs);
 		~Cat();
 
-		void	makeSound();
+		void	makeSound() const;
 };
 
-
-#endif;
+#endif

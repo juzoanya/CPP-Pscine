@@ -6,11 +6,14 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 15:00:41 by juzoanya          #+#    #+#             */
-/*   Updated: 2023/07/07 12:46:03 by juzoanya         ###   ########.fr       */
+/*   Updated: 2023/07/09 18:32:17 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
+
+char	ScalarConverter::_type;
+char	ScalarConverter::_sign;
 
 ScalarConverter::ScalarConverter()
 {};
@@ -29,62 +32,115 @@ ScalarConverter& ScalarConverter::operator=(const ScalarConverter& rhs)
 	return (*this);
 }
 
-void	ScalarConverter::_toChar(const std::string& str)
+void	ScalarConverter::toChar(const std::string& str, const long long& nbr)
 {
-	if (str.size() == 3 && (str.at(0) == '\'' && str.at(str.length() - 1) == '\''))
+	char	cValue;
+
+	if (ScalarConverter::_type == 'c')
 	{
-		char	cValue = str[1];
-		std::cout << "char: " << cValue << std::endl;
+		cValue = static_cast<char>(str[0]);
+		if (str.size() == 1 && isprint(cValue))
+			std::cout << "char: '" << cValue << "'" << std::endl;
+		else if (cValue == '0')
+			std::cout << "char: Non displayable" << std::endl;
+		else
+			std::cout << "char: Non displayable" << std::endl;
 	}
-	else if (str.size() == 1)
+	else if (ScalarConverter::_type == 'i' || ScalarConverter::_type == 'd' || ScalarConverter::_type == 'f')
 	{
-		char	cValue = str[0];
-		if (!isprint(cValue))
-			throw ScalarConverter::NonPrintableChar();
-		else if (!isdigit(cValue))
-			std::cout << "char: " << cValue << std::endl;
+		if (nbr >= 1 && nbr <= 256)
+		{
+			cValue = static_cast<char>(std::floor(nbr));
+			if (isprint(cValue))
+				std::cout << "char: '" << cValue << "'" << std::endl;
+			else
+				std::cout << "char: Non displayable" << std::endl;
+		}
+		else
+		{
+			std::cout << "char: impossible" << std::endl;
+			return;
+		}
 	}
 	else
+	{
 		std::cout << "char: impossible" << std::endl;
-	char cValue = str[0];
-	std::cout << static_cast<int>(cValue) << std::endl;
+		return;
+	}
 }
 
-void	ScalarConverter::_toInt(const std::string& str)
+void	ScalarConverter::toInt(const std::string& str, const long long& nbr)
 {
 	int	iValue;
 	std::istringstream	iss(str);
 
-	if (iss >> iValue)
+	if (ScalarConverter::_type == 'c')
+	{
+		iValue = static_cast<int>(str[0]);
+		
 		std::cout << "int: " << iValue << std::endl;
+	}
+	else if (nbr >= INT_MIN && nbr <= INT_MAX)
+	{
+		iValue = static_cast<int>(nbr);
+		std::cout << "int: " << iValue << std::endl;
+	}
 	else
-		std::cerr << "int: impossible" << std::endl;
+		std::cout << "int: impossible" << std::endl;
 }
 
-void	ScalarConverter::_toDouble(const std::string& str)
+void	ScalarConverter::toDouble(const std::string& str, const long long& nbr)
 {
-	long	lValue;
 	double	dValue;
-	std::stringstream	iss(str);
 
-	iss >> lValue;
-	dValue = static_cast<double>(lValue);
-	std::cout << "long: " << lValue << std::endl;
-	// if (iss >> dValue)
-	// {
-	// 	if (dValue == std::floor(dValue))
-	// 	{
-	// 		std::cout << "F-double: " << dValue << std::endl;
-	// 		std::ostringstream	oss;
-	// 		oss << std::fixed << std::setprecision(1) << dValue;
-	// 		std::string appendValue = oss.str();
-	// 		std::istringstream	appendIss(appendValue);
-	// 		appendIss >> dValue;
-	// 	}
-		std::cout << "double: " << dValue << std::endl;
-	// }
-	// else
-	//	std::cerr << "double: impossible" << std::endl;
+	if (ScalarConverter::_type == 'c')
+	{
+		dValue = static_cast<double>(str[0]);
+		std::cout << "double: " << std::fixed << std::setprecision(1) << dValue << std::endl;
+	}
+	else if (nbr >= DBL_MIN && nbr <= DBL_MAX)
+	{
+		dValue = static_cast<double>(nbr);
+		std::cout << "double: " << std::fixed << std::setprecision(1) << dValue << std::endl;
+	}
+	else
+		std::cout << "double: impossible" << std::endl;
+}
+
+void	ScalarConverter::toFloat(const std::string& str, const long long& nbr)
+{
+	float	fValue;
+
+	if (ScalarConverter::_type == 'c')
+	{
+		fValue = static_cast<float>(str[0]);
+		std::cout << "float: " << std::fixed << std::setprecision(1) << fValue << "f" << std::endl;
+	}
+	else if (nbr >= FLT_MIN && nbr <= FLT_MAX)
+	{
+		fValue = static_cast<float>(nbr);
+		std::cout << "float: " << std::fixed << std::setprecision(1) << fValue << "f" << std::endl;
+
+	}
+	else
+		std::cout << "float: impossible" << std::endl;
+}
+
+void	pseudoConvert(const std::string& str)
+{
+	std::cout << "char: impossible" << std::endl;
+	std::cout << "int: impossible" << std::endl;
+	if (str == "nan" || str == "+inf" || str == "-inf")
+	{
+		std::cout << "float: " << str << "f" << std::endl;
+		std::cout << "double: " << str << std::endl;
+	}
+	else
+	{
+		std::cout << "float: " << str << std::endl;
+		std::string popedStr = str.substr(0, str.size() - 1);
+		std::cout << "double: " << popedStr << std::endl;
+	}
 }
 
 bool	checkDigits(const std::string& str)
@@ -101,27 +157,55 @@ bool	checkDigits(const std::string& str)
 	return(false);
 }
 
+char	checkType(const std::string& str)
+{
+	int	size = str.size();
+
+	if (size == 1 && isascii(str[0]))
+		return('c');
+	else if (size == 2 && str[0] == '\\')
+		return('c');
+	else if (size > 1 && checkDigits(str))
+		return('i');
+	else if (size > 1 && (str.find('.') != std::string::npos))
+	{
+		if (str.find('f') != std::string::npos)
+			return('f');
+		else
+			return('d');
+	}
+	else if (str == "nan" || str == "nanf" || str == "-inf" || str == "-inff" || str == "+inf" || str == "+inff")
+		return('p');
+	return('u');
+}
+
 void	ScalarConverter::convert(const std::string& str)
 {
-	double			lValue;
-	//bool			allDigit = false;
-	std::stringstream	iss(str);
+	long long	nbr = 0;
 
-	lValue = 3456789023;
-	if (str.empty() || !checkDigits(str))
+	ScalarConverter::_type = checkType(str);
+	std::cout << "--------" << str << "--------" << std::endl;
+	std::cout << "--------" << ScalarConverter::_type << "--------" << std::endl;
+	std::cout << str.size() << std::endl;
+	if (str.empty() || ScalarConverter::_type == 'u')
 	{
 		throw ScalarConverter::InvalidInput();
 		return;
 	}
-	//std::cout << checkDigits(str) << std::endl;
-	std::cout << lValue << std::endl;
-	// double tryD = std::stod(str);
-	// std::cout << tryD << std::endl;
-	std::cout << "try: " << static_cast<double>(lValue) << std::endl;
-	ScalarConverter::_toChar(str);
-	ScalarConverter::_toInt(str);
-	ScalarConverter::_toDouble(str);
-	// ScalarConverter::_toFloat(str);
+	if (ScalarConverter::_type == 'i' || ScalarConverter::_type == 'd' || ScalarConverter::_type == 'f')
+	{
+		std::stringstream	iss(str);
+		iss >> nbr;
+	}
+	if (ScalarConverter::_type == 'p')
+	{
+		pseudoConvert(str);
+		return;
+	}
+	ScalarConverter::toChar(str, nbr);
+	ScalarConverter::toInt(str, nbr);
+	ScalarConverter::toFloat(str, nbr);
+	ScalarConverter::toDouble(str, nbr);
 	
 }
 
@@ -134,70 +218,3 @@ const char* ScalarConverter::NonPrintableChar::what() const throw()
 {
 	return ("char: Non displayable");
 }
-
-/*
-class ScalarConverter {
-public:
-	static void convert(const std::string& literal) {
-		if (literal.empty()) {
-			std::cout << "Invalid literal." << std::endl;
-			return;
-		}
-
-		char firstChar = literal[0];
-
-		if (literal.length() == 1) {
-			if (isPrintableChar(firstChar)) {
-				std::cout << "char: " << firstChar << std::endl;
-				return;
-			}
-			else {
-				std::cout << "Invalid char literal." << std::endl;
-				return;
-			}
-		}
-
-		std::istringstream iss(literal);
-
-		if (firstChar == '\'' && literal[literal.length() - 1] == '\'') {
-			char charLiteral;
-			iss >> std::noskipws >> charLiteral;
-			std::cout << "char: " << charLiteral << std::endl;
-		}
-		else if (literal.find_first_of("f") != std::string::npos) {
-			float floatLiteral;
-			iss >> floatLiteral;
-			if (std::isnan(floatLiteral) || std::isinf(floatLiteral)) {
-				std::cout << "float: " << floatLiteral << std::endl;
-			}
-			else {
-				std::cout << "float: " << std::fixed << floatLiteral << std::endl;
-			}
-		}
-		else {
-			double doubleLiteral;
-			iss >> doubleLiteral;
-			if (std::isnan(doubleLiteral) || std::isinf(doubleLiteral)) {
-				std::cout << "double: " << doubleLiteral << std::endl;
-			}
-			else {
-				std::cout << "double: " << std::fixed << doubleLiteral << std::endl;
-			}
-		}
-	}
-
-private:
-	static bool isPrintableChar(char c) {
-		return c >= 32 && c <= 126;
-	}
-};
-
-int main() {
-	ScalarConverter::convert("'c'");
-	ScalarConverter::convert("42");
-	ScalarConverter::convert("-4.2f");
-	ScalarConverter::convert("-inf");
-	ScalarConverter::convert("nan");
-	
-	return 0;
-}*/

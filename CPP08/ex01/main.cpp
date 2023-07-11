@@ -6,21 +6,21 @@
 /*   By: juzoanya <juzoanya@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 21:06:21 by juzoanya          #+#    #+#             */
-/*   Updated: 2023/07/10 22:39:40 by juzoanya         ###   ########.fr       */
+/*   Updated: 2023/07/11 20:34:47 by juzoanya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Span.hpp"
 
 int main() {
-	Span span(5);
-	span.addNumber(6);
-	span.addNumber(3);
-	span.addNumber(17);
-	span.addNumber(9);
-	span.addNumber(11);
-	std::cout << span.shortestSpan() << std::endl;
-	std::cout << span.longestSpan() << std::endl;
+	Span sp(5);
+	sp.addNumber(6);
+	sp.addNumber(3);
+	sp.addNumber(17);
+	sp.addNumber(9);
+	sp.addNumber(11);
+	std::cout << sp.shortestSpan() << std::endl;
+	std::cout << sp.longestSpan() << std::endl;
 	std::cout << std::endl;
 
 	int	size = 10000;
